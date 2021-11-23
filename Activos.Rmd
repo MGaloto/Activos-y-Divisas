@@ -1,0 +1,169 @@
+---
+title: "Dinamica de los Activos Covid-19"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: cosmo
+
+
+---
+
+
+<style>                     
+.navbar {
+  background-color:black;
+  border-color:white;
+}
+.navbar-brand {
+color:white!important;
+}
+</style>   
+
+<style type="text/css">
+
+.chart-title {  /* chart_title  */
+   font-size: 15px
+
+</style>
+
+```{r setup, include=FALSE}
+
+```
+
+
+
+```{r}
+
+library(flexdashboard)
+library(tidyr)
+library(ggplot2)
+library(readr)  
+library(dplyr)  
+library(plotly)
+library(readxl)
+library(rvest)
+library(rsconnect)
+library(ggplot2)
+library(ggthemes)
+library(viridisLite)
+library(dplyr)
+library(plotly)
+library(quantmod)
+library(highcharter)
+library(tidyverse)
+library(ggplot2)
+library(corrplot) 
+library(GGally)
+library(readr)  
+library(dplyr)  
+library(crayon) 
+library(modeest)
+library(readxl)
+library(ggthemes)
+library(lubridate)
+library(gganimate)
+
+```
+
+
+
+```{r}
+
+
+oro_btc = read_excel('orobtc.xlsx')
+
+
+
+
+oro_btc$BTC_B = log(oro_btc$BTC_B)
+
+
+oro_btc$ORO_B = log(oro_btc$ORO_B)
+
+oro_btc$USDEUR_B = log(oro_btc$USDEUR_B)
+
+oro_btc$NASDAQ_B = log(oro_btc$NASDAQ_B)
+
+
+oro_btc$USDEUR = round(oro_btc$USDEUR, 2)
+
+
+```
+
+
+
+# Series Temporales
+
+
+ 
+
+Column {.tabset}
+-----------------------------------------------------------
+
+### Series de Tiempo
+
+
+
+```{r}
+
+
+colors <- c("BTC" = "#4d4d4e", "ORO" = "#DAA520", "NASDAQ" = "#092FCA", "USDEUR" = "#85bb65")
+
+dl = oro_btc %>% 
+  ggplot() + 
+    geom_path(aes(x = FECHA, y = BTC_B, color = "BTC"), alpha = 0.7, size = 1.5) + 
+    geom_path(aes(x = FECHA, y = NASDAQ_B, color = "NASDAQ"), alpha = 0.7, size = 1.5) + 
+    geom_path(aes(x = FECHA, y = USDEUR_B, color = "USDEUR"), alpha = 0.7, size = 1.5) + 
+    geom_path(aes(x = FECHA, y = ORO_B, color = "ORO"), alpha = 0.7, size = 1.5) + 
+    geom_point(aes(x = FECHA, y = BTC_B), alpha = 0.7, size = 4) +
+    geom_point(aes(x = FECHA, y = NASDAQ_B), alpha = 0.7, size = 4) +
+    geom_point(aes(x = FECHA, y = USDEUR_B), alpha = 0.7, size = 4) +
+    geom_point(aes(x = FECHA, y = ORO_B), alpha = 0.7, size = 4) +
+    geom_text(aes(x = FECHA, y = BTC_B, label = paste0("BTC: ",BTC)), hjust = -0.2, size = 5) +
+    geom_text(aes(x = FECHA, y = ORO_B, label = paste0("ORO: ",ORO)), hjust = -0.2, size = 5) +
+    geom_text(aes(x = FECHA, y = NASDAQ_B, label = paste0("NASDAQ: ",NASDAQ)), hjust = -0.2, size = 5) +
+    geom_text(aes(x = FECHA, y = USDEUR_B, label = paste0("USD/EUR: ",USDEUR)), hjust = -0.2, size = 5) +
+    labs(title = 'Date: {frame_along}', x = 'Año', y = 'Activos', subtitle = "Dinamica de principales Activos en Logaritmos. Base 100 - 01/01/2018",
+    caption = "Elaboracion propia en base a datos de Ambito.com e Investing.com", color = "Activos") +
+    theme_minimal() + 
+    theme(legend.position="right") +
+  scale_color_manual(values = colors) +
+    transition_reveal(FECHA) +
+    geom_vline(xintercept=oro_btc$FECHA[566],linetype=1, alpha = 0.5,
+                color = "black", size=0.7) +
+    annotate(
+    geom = "curve",
+    x = oro_btc$FECHA[566],
+    y = 5.3,
+    xend = oro_btc$FECHA[520],
+    yend = 5.5,
+    curvature = 0,
+    size = 1,
+    alpha = 0.4,
+    arrow = arrow(length = unit(2, "mm"))) +
+    annotate(geom = "text",
+            size = 3,
+             x = oro_btc$FECHA[440],
+             y = 5.7,
+             label = "Covid-19\n Impacto\n  Mundial",
+             hjust = "left")
+
+animate(dl, nframes = 500, height = 700, width = 1000)
+
+animate(dl, nframes = 500,
+        renderer = gifski_renderer('activos.gif'),
+        height = 600, width = 900)
+
+
+```
+
+
+```{r}
+# animate(dl, nframes = 500,
+#         renderer = gifski_renderer('activos.gif'),
+#         height = 600, width = 900)
+
+
+
+
+```
+

@@ -2,3 +2,7 @@
 Movimiento de Activos y Divisas Pre y Post Shock Covid-19. Libreria Gganimate.
 
 Se pueden visualizar interesantes cambios de tendencia en los activos post shock covid-19.
+
+
+
+![](C:/Users/maxig/Desktop/Carpetas/Trabajos en R/Dinamicos/activos.gif)

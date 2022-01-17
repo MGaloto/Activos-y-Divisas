@@ -5,4 +5,4 @@ Se pueden visualizar interesantes cambios de tendencia en los activos post shock
 
 
 
-![](C:/Users/maxig/Desktop/Carpetas/Trabajos en R/Dinamicos/activos.gif)
+![aaa](C:/Users/maxig/Desktop/Carpetas/Trabajos en R/Dinamicos/activos.gif)
